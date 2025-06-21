@@ -31,9 +31,7 @@ pak::pak("jtr13/annotreer")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
-
-```{r example}
+```{r example, fig.width=10, fig.retina=2}
 library(annotreer)
 library(rpart)
 kmod <- rpart(Kyphosis ~ Age + Number + Start, data = kyphosis, cp = 0, minsplit = 2)

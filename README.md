@@ -24,8 +24,6 @@ pak::pak("jtr13/annotreer")
 
 ## Example
 
-This is a basic example which shows you how to solve a common problem:
-
 ``` r
 library(annotreer)
 library(rpart)
