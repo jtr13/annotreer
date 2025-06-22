@@ -15,4 +15,7 @@ Imports:
     rpart.plot,
     stats
 Suggests: 
+    knitr,
+    rmarkdown,
     rpart
+VignetteBuilder: knitr

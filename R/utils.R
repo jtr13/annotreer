@@ -39,12 +39,6 @@ get.class.stats <- function(x)
 # and deviance (equal to smaller count)
 # default colors
 #
-node.fun.class.dev <- function(x, labs, digits, varlen) {
-  stats <- get.class.stats(x)
-  paste(stats$ylevels[1], stats$ylevels[2], "\n", stats$n.per.lev[,1], "      ", stats$n.per.lev[,2],
-        "\nmisclassified: ", x$frame$dev)
-}
-
 
 node.fun.gt.calc <- function(x, labs, digits, varlen) x$frame$label
 
@@ -118,9 +112,9 @@ get_descendants <- function(node, all_nodes) {
 }
 
 
-gt_calc_colors <- function(mod, showpruned = TRUE) {
+gt_calc_colors <- function(mod, show_pruned = TRUE) {
   if (nrow(mod$frame) == 1) {
-    "#00A86B50"
+    return("#00A86B50")
   } else {
     mingt <- min(mod$frame$gt, na.rm = TRUE)
     mingt_nodes <- na.omit(mod$frame$nn[mod$frame$gt == mingt])
@@ -131,7 +125,7 @@ gt_calc_colors <- function(mod, showpruned = TRUE) {
     # c6e1ff is used in classification_pruning.qmd, be careful!
     colors <- rep("#00A86B50", nrow(mod$frame))  # default color
     colors[!is.na(mod$frame$gt)] <- "#c6e1ff"
-    if (showpruned) {
+    if (show_pruned) {
       colors[mod$frame$gt == mingt] <- "#c6c9ff"
       colors[mod$frame$nn %in% to_be_pruned] <- "grey90"
     }
@@ -139,39 +133,64 @@ gt_calc_colors <- function(mod, showpruned = TRUE) {
   colors
 }
 
-create_label <- function(mod, gt = FALSE, cp = TRUE,
-                         showmin = TRUE) {
+create_label <- function(mod,
+                         show_classes = TRUE,
+                         show_gt = TRUE,
+                         show_cp = TRUE,
+                         show_leaf_dev = TRUE,
+                         show_internal_dev = TRUE,
+                         show_min = TRUE) {
+
+  # create leaf labels
+  label <- ""
+
+  if(show_classes) {
+    class_stats <- get.class.stats(mod)
+    label1 <- abbreviate(class_stats$ylevels[1], 6)
+    label2 <- abbreviate(class_stats$ylevels[2], 6)
+    label_class <- paste0(label1, strrep(" ", 13 - nchar(label1) - nchar(label2)),
+                          label2, "\n", class_stats$n.per.lev[,1], "       ",
+                          class_stats$n.per.lev[,2], "\n")
+    label <- paste0(label, label_class)
+  }
 
   # deal with 1 node situation
   if (nrow(mod$frame) == 1) {
-    return(paste("   leaf   \ndev: ", mod$frame$dev))
+    return(paste(label, "dev: ", mod$frame$dev))
   }
 
-  # create leaf labels
-  label <- ifelse(mod$frame$var == "<leaf>",
-                  paste("   leaf   \ndev: ", mod$frame$dev), "")
+  if (show_leaf_dev) {
+    label <- ifelse(mod$frame$var == "<leaf>",
+                    paste0(label, "dev: ", mod$frame$dev, "\n"),
+                           label)
+                    }
 
-  if (gt) {
+  if (show_gt) {
     label_gt <- ifelse(
       mod$frame$var != "<leaf>",
       paste0("g(t) = (", mod$frame$dev, "-",
              mod$frame$subdev, ") / \n (",
              mod$frame$numsplits, "-1) = ",
-             round(mod$frame$gt, 2)), "")
-    label <- paste0(label, label_gt, "\n")
+             round(mod$frame$gt, 2), "\n"), "")
+    label <- paste0(label, label_gt)
   }
 
-  if (cp) {
+  if (show_cp) {
     label_cp <- ifelse(mod$frame$var != "<leaf>",
-                       paste0("cp: ",
-                              round(mod$frame$gt/mod$frame$dev[1], 5)), "")
-    label <- paste0(label, label_cp, "\n")
+        paste0("cp: ", round(mod$frame$gt/mod$frame$dev[1], 5), "\n"), "")
+    label <- paste0(label, label_cp)
   }
 
-  if (showmin) {
+  if (show_min) {
     mingt <- min(mod$frame$gt, na.rm = TRUE)
-    label_showmin <- ifelse(!is.na(mod$frame$gt) & mod$frame$gt == mingt, "*minimum", "")
+    label_showmin <- ifelse(!is.na(mod$frame$gt) & mod$frame$gt == mingt, "*minimum\n", "")
     label <- paste0(label, label_showmin)
+  }
+
+  if (show_internal_dev) {
+    label_dev <- ifelse(mod$frame$var != "<leaf>",
+                       paste0("dev: ", mod$frame$dev, "\n"), "")
+    label <- paste0(label, label_dev)
   }
   sub("\\n+$", "", label)
 }

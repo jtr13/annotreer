@@ -6,23 +6,32 @@
 \usage{
 annotree(
   mod,
-  gt = FALSE,
-  cp = TRUE,
-  showpruned = TRUE,
-  showmin = TRUE,
+  show_classes = TRUE,
+  show_gt = FALSE,
+  show_cp = FALSE,
+  show_pruned = FALSE,
+  show_min = FALSE,
+  show_leaf_dev = FALSE,
+  show_internal_dev = FALSE,
   main = NULL
 )
 }
 \arguments{
 \item{mod}{an \code{rpart} object}
 
-\item{gt}{logical. If \code{TRUE} the g(t) term (misclassification reduction per split) is included. Defaults to \code{FALSE}.}
+\item{show_classes}{logical. If \code{TRUE} show class labels and counts. Defaults to \code{TRUE}.}
 
-\item{cp}{logical. If \code{TRUE} the complexity parameter (cp) value, calculated as g(t) divided by root node deviance is included. Defaults to \code{TRUE}.}
+\item{show_gt}{logical. If \code{TRUE} the g(t) term (misclassification reduction per split) is included. Defaults to \code{FALSE}.}
 
-\item{showpruned}{logical. If \code{TRUE} the nodes slated for pruning are plotted in a distinct color. Defaults to \code{TRUE}.}
+\item{show_cp}{logical. If \code{TRUE} the complexity parameter (cp) value, calculated as g(t) divided by root node deviance is included. Defaults to \code{FALSE}.}
 
-\item{showmin}{logical. If \code{TRUE} the node with minimum g(t) is labeled "*minimum". Defaults to \code{TRUE}.}
+\item{show_pruned}{logical. If \code{TRUE} the nodes slated for pruning are plotted in a distinct color. Defaults to \code{FALSE}.}
+
+\item{show_min}{logical. If \code{TRUE} the node with minimum g(t) is labeled "*minimum". Defaults to \code{FALSE}.}
+
+\item{show_leaf_dev}{logical. If \code{TRUE} leaves are labeled with "dev" (misclassified cases). Defaults to \code{FALSE}.}
+
+\item{show_internal_dev}{logical. If \code{TRUE} internal nodes are labeled with "dev" (misclassified cases). Defaults to \code{FALSE}.}
 
 \item{main}{An optional title for the plot.}
 }
