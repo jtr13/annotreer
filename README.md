@@ -64,7 +64,7 @@ library(annotreer)
 annotree(kmod, show_classes = TRUE)
 ```
 
-<img src="man/figures/README-example-1.png" width="60%" />
+<img src="man/figures/README-example-1.png" width="70%" style="display: block; margin: auto;" />
 
 Since we set the parameters of `rpart()` to grow as large a tree as
 possible, the deviance for all of the leaf nodes is zero: every leaf
@@ -75,7 +75,7 @@ leaves more explict by setting `show_leaf_dev` to `TRUE`:
 annotree(kmod, show_classes = TRUE, show_leaf_dev = TRUE)
 ```
 
-<img src="man/figures/README-unnamed-chunk-3-1.png" width="60%" />
+<img src="man/figures/README-unnamed-chunk-3-1.png" width="70%" style="display: block; margin: auto;" />
 
 Now we turn to the pruning process. `rpart()` returns a `cptable` which
 provides pruning options. Following the cost complexity pruning
@@ -93,10 +93,10 @@ kmod$cptable
 #>        CP nsplit rel error xerror   xstd
 #> 1 0.17647      0    1.0000  1.000 0.2156
 #> 2 0.11765      1    0.8235  1.235 0.2320
-#> 3 0.07843      2    0.7059  1.118 0.2243
-#> 4 0.05882      5    0.4706  1.118 0.2243
+#> 3 0.07843      2    0.7059  1.059 0.2201
+#> 4 0.05882      5    0.4706  1.059 0.2201
 #> 5 0.02941     10    0.1765  1.059 0.2201
-#> 6 0.00000     16    0.0000  1.118 0.2243
+#> 6 0.00000     16    0.0000  1.353 0.2387
 ```
 
 The `CP` column shows the minimum complexity parameter for a tree of the
@@ -108,7 +108,7 @@ will have 5 splits:
 annotree(prune(kmod, .06), main = "Pruned with cp = .06")
 ```
 
-<img src="man/figures/README-unnamed-chunk-5-1.png" width="60%" />
+<img src="man/figures/README-unnamed-chunk-5-1.png" width="70%" style="display: block; margin: auto;" />
 
 ## How the cptable is created
 
@@ -185,7 +185,7 @@ annotree(kmod, show_classes = FALSE, show_gt = TRUE,
          show_leaf_dev = TRUE, show_internal_dev = TRUE)
 ```
 
-<img src="man/figures/README-unnamed-chunk-6-1.png" width="60%" />
+<img src="man/figures/README-unnamed-chunk-6-1.png" width="70%" style="display: block; margin: auto;" />
 
 By setting `show_min` to `TRUE` we can add “\*minimum” to the labels for
 node(s) with the minimum value for $g(t)$. Adding `show_pruned` changes
@@ -197,7 +197,7 @@ annotree(kmod, show_classes = FALSE, show_gt = TRUE,
          show_min = TRUE, show_pruned = TRUE)
 ```
 
-<img src="man/figures/README-unnamed-chunk-7-1.png" width="60%" />
+<img src="man/figures/README-unnamed-chunk-7-1.png" width="70%" style="display: block; margin: auto;" />
 
 The weakest links have $g(t) = 0.5$.
 
@@ -213,7 +213,7 @@ annotree(kmod, show_classes = FALSE, show_cp = TRUE,
          show_min = TRUE, show_pruned = TRUE)
 ```
 
-<img src="man/figures/README-unnamed-chunk-8-1.png" width="60%" />
+<img src="man/figures/README-unnamed-chunk-8-1.png" width="70%" style="display: block; margin: auto;" />
 
 To save space, henceforth we will only show the scaled values.
 
@@ -228,7 +228,7 @@ annotree(kmod2, show_classes = FALSE, show_cp = TRUE,
          show_min = TRUE, show_pruned = TRUE)
 ```
 
-<img src="man/figures/README-unnamed-chunk-9-1.png" width="60%" />
+<img src="man/figures/README-unnamed-chunk-9-1.png" width="70%" style="display: block; margin: auto;" />
 
 We continue in this way until the tree is reduced to a single node:
 
@@ -239,7 +239,7 @@ annotree(kmod3, show_classes = FALSE, show_cp = TRUE,
          show_min = TRUE, show_pruned = TRUE)
 ```
 
-<img src="man/figures/README-unnamed-chunk-10-1.png" width="60%" />
+<img src="man/figures/README-unnamed-chunk-10-1.png" width="70%" style="display: block; margin: auto;" />
 
 ``` r
 
@@ -249,7 +249,7 @@ annotree(kmod4, show_classes = FALSE, show_cp = TRUE,
          show_min = TRUE, show_pruned = TRUE)
 ```
 
-<img src="man/figures/README-unnamed-chunk-10-2.png" width="60%" />
+<img src="man/figures/README-unnamed-chunk-10-2.png" width="70%" style="display: block; margin: auto;" />
 
 ``` r
 
@@ -259,7 +259,7 @@ annotree(kmod5, show_classes = FALSE, show_cp = TRUE,
          show_min = TRUE, show_pruned = TRUE)
 ```
 
-<img src="man/figures/README-unnamed-chunk-10-3.png" width="60%" />
+<img src="man/figures/README-unnamed-chunk-10-3.png" width="70%" style="display: block; margin: auto;" />
 
 ``` r
 
@@ -269,4 +269,4 @@ annotree(kmod6, show_classes = TRUE, show_cp = TRUE,
          show_min = TRUE, show_pruned = TRUE)
 ```
 
-<img src="man/figures/README-unnamed-chunk-10-4.png" width="60%" />
+<img src="man/figures/README-unnamed-chunk-10-4.png" width="70%" style="display: block; margin: auto;" />
