@@ -10,12 +10,13 @@ knitr::opts_chunk$set(
   eval = TRUE,
   collapse = TRUE,
   comment = "#>",
+  dev = "svg",
   fig.width = 10,
   fig.height = 10,
   fig.retina = 2,
   fig.align = "center",
   fig.path = "man/figures/README-",
-  out.width = "70%"
+  out.width = "80%"
 )
 ```
 
