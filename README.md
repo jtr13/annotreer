@@ -75,6 +75,8 @@ leaves more explict by setting `show_leaf_dev` to `TRUE`:
 annotree(kmod, show_classes = TRUE, show_leaf_dev = TRUE)
 ```
 
+<img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" />
+
 Now we turn to the pruning process. `rpart()` returns a `cptable` which
 provides pruning options. Following the cost complexity pruning
 algorithm of CART (see Breiman, et al. 1984) the table does not show
@@ -88,6 +90,13 @@ the pruning process.
 
 ``` r
 kmod$cptable
+#>        CP nsplit rel error xerror   xstd
+#> 1 0.17647      0    1.0000  1.000 0.2156
+#> 2 0.11765      1    0.8235  1.176 0.2283
+#> 3 0.07843      2    0.7059  1.176 0.2283
+#> 4 0.05882      5    0.4706  1.118 0.2243
+#> 5 0.02941     10    0.1765  1.353 0.2387
+#> 6 0.00000     16    0.0000  1.294 0.2355
 ```
 
 The `CP` column shows the minimum complexity parameter for a tree of the
@@ -98,6 +107,8 @@ will have 5 splits:
 ``` r
 annotree(prune(kmod, .06), main = "Pruned with cp = .06")
 ```
+
+<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" />
 
 ## How the cptable is created
 
@@ -174,6 +185,8 @@ annotree(kmod, show_classes = FALSE, show_gt = TRUE,
          show_leaf_dev = TRUE, show_internal_dev = TRUE)
 ```
 
+<img src="man/figures/README-unnamed-chunk-6-1.png" width="100%" />
+
 By setting `show_min` to `TRUE` we can add “\*minimum” to the labels for
 node(s) with the minimum value for $g(t)$. Adding `show_pruned` changes
 the color of these nodes and their descendents:
@@ -183,6 +196,8 @@ annotree(kmod, show_classes = FALSE, show_gt = TRUE,
          show_leaf_dev = TRUE, show_internal_dev = TRUE, 
          show_min = TRUE, show_pruned = TRUE)
 ```
+
+<img src="man/figures/README-unnamed-chunk-7-1.png" width="100%" />
 
 The weakest links have $g(t) = 0.5$.
 
@@ -198,6 +213,8 @@ annotree(kmod, show_classes = FALSE, show_cp = TRUE,
          show_min = TRUE, show_pruned = TRUE)
 ```
 
+<img src="man/figures/README-unnamed-chunk-8-1.png" width="100%" />
+
 To save space, henceforth we will only show the scaled values.
 
 To determine the next threshold we need to recalculate $g(t)$ or `cp`.
@@ -211,6 +228,8 @@ annotree(kmod2, show_classes = FALSE, show_cp = TRUE,
          show_min = TRUE, show_pruned = TRUE)
 ```
 
+<img src="man/figures/README-unnamed-chunk-9-1.png" width="100%" />
+
 We continue in this way until the tree is reduced to a single node:
 
 ``` r
@@ -218,19 +237,36 @@ kmod3 <- prune(kmod2, .06)
 annotree(kmod3, show_classes = FALSE, show_cp = TRUE,
          show_leaf_dev = TRUE, show_internal_dev = TRUE, 
          show_min = TRUE, show_pruned = TRUE)
+```
+
+<img src="man/figures/README-unnamed-chunk-10-1.png" width="100%" />
+
+``` r
 
 kmod4 <- prune(kmod3, .08)
 annotree(kmod4, show_classes = FALSE, show_cp = TRUE,
          show_leaf_dev = TRUE, show_internal_dev = TRUE, 
          show_min = TRUE, show_pruned = TRUE)
+```
+
+<img src="man/figures/README-unnamed-chunk-10-2.png" width="100%" />
+
+``` r
 
 kmod5 <- prune(kmod4, .12)
 annotree(kmod5, show_classes = FALSE, show_cp = TRUE,
          show_leaf_dev = TRUE, show_internal_dev = TRUE, 
          show_min = TRUE, show_pruned = TRUE)
+```
+
+<img src="man/figures/README-unnamed-chunk-10-3.png" width="100%" />
+
+``` r
 
 kmod6 <- prune(kmod5, .18)
 annotree(kmod6, show_classes = TRUE, show_cp = TRUE,
          show_leaf_dev = TRUE, show_internal_dev = TRUE, 
          show_min = TRUE, show_pruned = TRUE)
 ```
+
+<img src="man/figures/README-unnamed-chunk-10-4.png" width="100%" />

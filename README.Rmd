@@ -7,7 +7,7 @@ output: github_document
 ```{r, include = FALSE}
 options(digits = 4)
 knitr::opts_chunk$set(
-  eval = FALSE,
+  eval = TRUE,
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-",
@@ -36,7 +36,7 @@ Did you ever create a classification tree with **rpart**, view the `cptable` ret
 
 We create a large tree with `rpart::rpart()` and visualize it with `annotree()`. The data is from the **rpart** package:
 
-```{r, eval = TRUE}
+```{r}
 library(rpart)
 head(kyphosis)
 ```
@@ -51,7 +51,7 @@ head(kyphosis)
 
 The goal is to classify the `Kyphosis` variable based on `Age`, `Number` and `Start`. By setting the parameter `show_classes = TRUE` in the call to `annotree()` below, the nodes are labeled with class labels and class counts. 
 
-```{r example, fig.width=10, fig.retina=2, eval = TRUE}
+```{r example, fig.width=10, fig.retina=2}
 kmod <- rpart(Kyphosis ~ Age + Number + Start, data = kyphosis, cp = 0, minsplit = 2)
 library(annotreer)
 annotree(kmod, show_classes = TRUE)
