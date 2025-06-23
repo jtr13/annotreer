@@ -41,7 +41,7 @@ annotree <- function(mod, show_classes = TRUE,
   rpart.plot::prp(mod, extra = 1, type = 2,
       node.fun = node.label,
       nn = TRUE, box.col = mod$frame$colors)
-  if (!is.null(main)) mtext(main, side = 3, line = 3, font = 2, cex = 1.2)
+  if (!is.null(main)) mtext(main, side = 3, line = 3, font = 2, cex = 1.5)
 
 }
 

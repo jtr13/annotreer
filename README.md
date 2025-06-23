@@ -64,7 +64,7 @@ library(annotreer)
 annotree(kmod, show_classes = TRUE)
 ```
 
-<img src="man/figures/README-example-1.svg" width="80%" style="display: block; margin: auto;" />
+<img src="man/figures/README-example-1.svg" width="70%" style="display: block; margin: auto;" />
 
 Since we set the parameters of `rpart()` to grow as large a tree as
 possible, the deviance for all of the leaf nodes is zero: every leaf
@@ -75,7 +75,7 @@ leaves more explict by setting `show_leaf_dev` to `TRUE`:
 annotree(kmod, show_classes = TRUE, show_leaf_dev = TRUE)
 ```
 
-<img src="man/figures/README-unnamed-chunk-3-1.svg" width="80%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-3-1.svg" width="70%" style="display: block; margin: auto;" />
 
 Now we turn to the pruning process. `rpart()` returns a `cptable` which
 provides pruning options. Following the cost complexity pruning
@@ -92,11 +92,11 @@ the pruning process.
 kmod$cptable
 #>        CP nsplit rel error xerror   xstd
 #> 1 0.17647      0    1.0000  1.000 0.2156
-#> 2 0.11765      1    0.8235  1.412 0.2417
-#> 3 0.07843      2    0.7059  1.353 0.2387
-#> 4 0.05882      5    0.4706  1.471 0.2446
-#> 5 0.02941     10    0.1765  1.294 0.2355
-#> 6 0.00000     16    0.0000  1.412 0.2417
+#> 2 0.11765      1    0.8235  1.353 0.2387
+#> 3 0.07843      2    0.7059  1.294 0.2355
+#> 4 0.05882      5    0.4706  1.294 0.2355
+#> 5 0.02941     10    0.1765  1.235 0.2320
+#> 6 0.00000     16    0.0000  1.059 0.2201
 ```
 
 The `CP` column shows the minimum complexity parameter for a tree of the
@@ -105,10 +105,10 @@ a number below `0.07843` and above `0.05882`, when pruning, the subtree
 will have 5 splits:
 
 ``` r
-annotree(prune(kmod, .06), main = "Pruned with cp = .06")
+annotree(prune(kmod, cp = .06), main = "Pruned with cp = .06")
 ```
 
-<img src="man/figures/README-unnamed-chunk-5-1.svg" width="80%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-5-1.svg" width="60%" style="display: block; margin: auto;" />
 
 ## How the cptable is created
 
@@ -128,55 +128,53 @@ tree. In this context, deviance means misclassified cases, which differs
 from the tree growing process in which the Gini index, not the number
 misclassified, is used to determine the next optimal split.
 
-The `CP` values in the table are a scaled version of $g(t)$, a direct
-measure of the misclassification reduction *per split*. For example, if
-it takes two splits to reduce the number of misclassified by one, then
-$g(t)$ would equal `0.5`. We’ll work in terms of $g(t)$ since it’s more
-intuitive, and return to `CP` later on.
+The `CP` values in the table are a scaled version of $g(t)$, the cost
+complexity value, which is a direct measure of the misclassification
+reduction *per split*. For example, if it takes two splits to reduce the
+number of misclassified by one, then $g(t)$ would equal `0.5`. We’ll
+work in terms of $g(t)$ since it’s more intuitive, and return to `CP`
+later on.
 
 More formally, for all internal nodes of the tree,
 
 $g(t) = \frac{R(t) - R(T_t)}{|\tilde{T}_t| - 1},$ where
 
-$t$ is a node in the decision tree,
+- $t$ is a node in the decision tree,
 
-$T_t$ is the subtree rooted at node $t$, including $t$ and all of its
-descendants,
+- $T_t$ is the subtree rooted at node $t$, including $t$ and all of its
+  descendants,
 
-$\tilde{T}_t$ is the set of terminal (leaf) nodes in the subtree $T_t$,
+- $\tilde{T}_t$ is the set of terminal (leaf) nodes in the subtree
+  $T_t$,
 
-$R(t)$ is the risk at node $t$, in this case, the deviance or
-misclassified cases,
+- $R(t)$ is the risk at node $t$, in this case, the deviance or
+  misclassified cases,
 
-$R(T_t)$ is the total risk of the subtree $T_t$, meaning the sum of
-risks at all terminal nodes in $T_t$,
+- $R(T_t)$ is the total risk of the subtree $T_t$, meaning the sum of
+  risks at all terminal nodes in $T_t$, and
 
-$|\tilde{T}_t|$ is the number of terminal nodes (leaves) in the subtree
-$T_t$,
+- $|\tilde{T}_t|$ is the number of terminal nodes (leaves) in the
+  subtree $T_t$,.
 
-and
+Less formally it’s the misclassification reduction *per split*, or,
 
-$g(t)$ is the cost-complexity value associated with pruning the subtree
-rooted at node $t$ during the current pruning step.
-
-Less formally we have
-
-$g(t)$ = ((deviance of branch $t$) - (deviance of node $t$)) / (number
-of splits in branch $t$)
+$g(t)$ = (the difference between the deviance of node $t$ and the sum of
+the deviance of node $t$’s leaf descendents) / (number of splits in
+branch $t$)
 
 For example, let’s consider the branch with root node 22 in the original
 large tree. We have:
 
-deviance of branch: 0 (sum of misclassified in leaf nodes)
+- deviance of branch: 0 (sum of misclassified in leaf nodes)
 
-deviance of node: 2 (misclassified in node)
+- deviance of node: 2 (misclassified in node)
 
-number of splits in branch: 4 (nodes 22, 44, 89, 45)
+- number of splits in branch: 4 (nodes 22, 44, 89, 45)
 
 Thus $g(t) = \frac{2 - 0}{4} = 0.5$
 
-Or, it takes 4 splits to reduce the deviance from 2 to 0, which averages
-to a 0.5 reduction per split.
+That is, it takes 4 splits to reduce the deviance from 2 to 0, which
+averages to a 0.5 reduction per split.
 
 The tree below displays $g(t)$ for all branches:
 
@@ -185,7 +183,7 @@ annotree(kmod, show_classes = FALSE, show_gt = TRUE,
          show_leaf_dev = TRUE, show_internal_dev = TRUE)
 ```
 
-<img src="man/figures/README-unnamed-chunk-6-1.svg" width="80%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-6-1.svg" width="70%" style="display: block; margin: auto;" />
 
 By setting `show_min` to `TRUE` we can add “\*minimum” to the labels for
 node(s) with the minimum value for $g(t)$. Adding `show_pruned` changes
@@ -197,7 +195,7 @@ annotree(kmod, show_classes = FALSE, show_gt = TRUE,
          show_min = TRUE, show_pruned = TRUE)
 ```
 
-<img src="man/figures/README-unnamed-chunk-7-1.svg" width="80%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-7-1.svg" width="70%" style="display: block; margin: auto;" />
 
 The weakest links have $g(t) = 0.5$.
 
@@ -213,60 +211,102 @@ annotree(kmod, show_classes = FALSE, show_cp = TRUE,
          show_min = TRUE, show_pruned = TRUE)
 ```
 
-<img src="man/figures/README-unnamed-chunk-8-1.svg" width="80%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-8-1.svg" width="70%" style="display: block; margin: auto;" />
 
 To save space, henceforth we will only show the scaled values.
 
 To determine the next threshold we need to recalculate $g(t)$ or `cp`.
 This is necessary because pruning the tree changes the cost reductions
-for the remaining nodes.
+for the remaining nodes. We will set `cp` to a value slightly above the
+minimum; we choose `.03`.
 
 ``` r
-kmod2 <- prune(kmod, .03)
+kmod2 <- prune(kmod, cp = .03)
 annotree(kmod2, show_classes = FALSE, show_cp = TRUE,
          show_leaf_dev = TRUE, show_internal_dev = TRUE, 
          show_min = TRUE, show_pruned = TRUE)
 ```
 
-<img src="man/figures/README-unnamed-chunk-9-1.svg" width="80%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-9-1.svg" width="70%" style="display: block; margin: auto;" />
 
 We continue in this way until the tree is reduced to a single node:
 
 ``` r
-kmod3 <- prune(kmod2, .06)
+kmod3 <- prune(kmod2, cp = .06)
 annotree(kmod3, show_classes = FALSE, show_cp = TRUE,
          show_leaf_dev = TRUE, show_internal_dev = TRUE, 
          show_min = TRUE, show_pruned = TRUE)
 ```
 
-<img src="man/figures/README-unnamed-chunk-10-1.svg" width="80%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-10-1.svg" width="70%" style="display: block; margin: auto;" />
 
 ``` r
-
-kmod4 <- prune(kmod3, .08)
+kmod4 <- prune(kmod3, cp = .08)
 annotree(kmod4, show_classes = FALSE, show_cp = TRUE,
          show_leaf_dev = TRUE, show_internal_dev = TRUE, 
          show_min = TRUE, show_pruned = TRUE)
 ```
 
-<img src="man/figures/README-unnamed-chunk-10-2.svg" width="80%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-11-1.svg" width="70%" style="display: block; margin: auto;" />
 
 ``` r
-
-kmod5 <- prune(kmod4, .12)
+kmod5 <- prune(kmod4, cp = .12)
 annotree(kmod5, show_classes = FALSE, show_cp = TRUE,
          show_leaf_dev = TRUE, show_internal_dev = TRUE, 
          show_min = TRUE, show_pruned = TRUE)
 ```
 
-<img src="man/figures/README-unnamed-chunk-10-3.svg" width="80%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-12-1.svg" width="70%" style="display: block; margin: auto;" />
 
 ``` r
-
-kmod6 <- prune(kmod5, .18)
+kmod6 <- prune(kmod5, cp = .18)
 annotree(kmod6, show_classes = TRUE, show_cp = TRUE,
          show_leaf_dev = TRUE, show_internal_dev = TRUE, 
          show_min = TRUE, show_pruned = TRUE)
 ```
 
-<img src="man/figures/README-unnamed-chunk-10-4.svg" width="80%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-13-1.svg" width="70%" style="display: block; margin: auto;" />
+
+Note that the weakest links in the trees above correspond to the values
+in `cptable`. We have replicated the process by which the original tree
+is successively pruned at the new weakest link:
+
+``` r
+kmod$cptable
+#>        CP nsplit rel error xerror   xstd
+#> 1 0.17647      0    1.0000  1.000 0.2156
+#> 2 0.11765      1    0.8235  1.353 0.2387
+#> 3 0.07843      2    0.7059  1.294 0.2355
+#> 4 0.05882      5    0.4706  1.294 0.2355
+#> 5 0.02941     10    0.1765  1.235 0.2320
+#> 6 0.00000     16    0.0000  1.059 0.2201
+```
+
+Again, the table shows the minimum `CP` value for a particular number of
+splits. (Due to rounding in the display, the actual number may be
+slightly higher.)
+
+The `rel error` displays the sum of the misclassified cases for a tree
+of the size indicated *divided by* the misclassified cases in the root
+node (`nsplit` = 0) to ensure that the `rel error` of a tree with no
+splits is one.
+
+In this case we have:
+
+``` r
+data.frame(nsplit = kmod$cptable[, "nsplit"],
+           misclassified = 17*kmod$cptable[, "rel error"])
+#>   nsplit misclassified
+#> 1      0            17
+#> 2      1            14
+#> 3      2            12
+#> 4      5             8
+#> 5     10             3
+#> 6     16             0
+```
+
+which corresponds to the misclassified cases in the trees shown above.
+
+## Choosing the `cp` value
+
+The `xerror` and `xstd` refer to the
