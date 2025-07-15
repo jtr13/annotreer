@@ -92,11 +92,11 @@ the pruning process.
 kmod$cptable
 #>        CP nsplit rel error xerror   xstd
 #> 1 0.17647      0    1.0000  1.000 0.2156
-#> 2 0.11765      1    0.8235  1.353 0.2387
-#> 3 0.07843      2    0.7059  1.294 0.2355
-#> 4 0.05882      5    0.4706  1.294 0.2355
-#> 5 0.02941     10    0.1765  1.235 0.2320
-#> 6 0.00000     16    0.0000  1.059 0.2201
+#> 2 0.11765      1    0.8235  1.118 0.2243
+#> 3 0.07843      2    0.7059  1.118 0.2243
+#> 4 0.05882      5    0.4706  1.118 0.2243
+#> 5 0.02941     10    0.1765  1.118 0.2243
+#> 6 0.00000     16    0.0000  1.118 0.2243
 ```
 
 The `CP` column shows the minimum complexity parameter for a tree of the
@@ -275,11 +275,11 @@ is successively pruned at the new weakest link:
 kmod$cptable
 #>        CP nsplit rel error xerror   xstd
 #> 1 0.17647      0    1.0000  1.000 0.2156
-#> 2 0.11765      1    0.8235  1.353 0.2387
-#> 3 0.07843      2    0.7059  1.294 0.2355
-#> 4 0.05882      5    0.4706  1.294 0.2355
-#> 5 0.02941     10    0.1765  1.235 0.2320
-#> 6 0.00000     16    0.0000  1.059 0.2201
+#> 2 0.11765      1    0.8235  1.118 0.2243
+#> 3 0.07843      2    0.7059  1.118 0.2243
+#> 4 0.05882      5    0.4706  1.118 0.2243
+#> 5 0.02941     10    0.1765  1.118 0.2243
+#> 6 0.00000     16    0.0000  1.118 0.2243
 ```
 
 Again, the table shows the minimum `CP` value for a particular number of
@@ -309,4 +309,4 @@ which corresponds to the misclassified cases in the trees shown above.
 
 ## Choosing the `cp` value
 
-The `xerror` and `xstd` refer to the
+The `xerror` and `xstd` refer to

@@ -28,8 +28,18 @@
 
 annotree <- function(mod, show_classes = TRUE,
                      show_gt = FALSE, show_cp = FALSE, show_pruned = FALSE,
-                     show_min = FALSE, show_leaf_dev = FALSE,
+                     show_min = FALSE, show_all_dev = FALSE,
+                     show_leaf_dev = FALSE,
                      show_internal_dev = FALSE, main = NULL) {
+  if(show_classes & (mod$method != "class")) {
+    message("`show_classes` only works with classification trees.")
+    show_classes <- FALSE
+  }
+  if (show_all_dev) {
+    show_leaf_dev <- TRUE
+    show_internal_dev <- TRUE
+  }
+  }
   mod$frame <- annotate_gt(mod)
   mod$frame$nn <- as.numeric(rownames(mod$frame))
   mod$frame$label <- create_label(mod, show_classes = show_classes,
