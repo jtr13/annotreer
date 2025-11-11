@@ -39,7 +39,7 @@ annotree <- function(mod, show_classes = TRUE,
     show_leaf_dev <- TRUE
     show_internal_dev <- TRUE
   }
-  }
+  
   mod$frame <- annotate_gt(mod)
   mod$frame$nn <- as.numeric(rownames(mod$frame))
   mod$frame$label <- create_label(mod, show_classes = show_classes,
