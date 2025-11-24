@@ -161,7 +161,7 @@ create_label <- function(mod,
 
   if (show_leaf_dev) {
     label <- ifelse(mod$frame$var == "<leaf>",
-                    paste0(label, "dev: ", mod$frame$dev, "\n"),
+                    paste0(label, "dev: ", round(mod$frame$dev), "\n"),
                            label)
                     }
 
@@ -189,7 +189,7 @@ create_label <- function(mod,
 
   if (show_internal_dev) {
     label_dev <- ifelse(mod$frame$var != "<leaf>",
-                       paste0("dev: ", mod$frame$dev, "\n"), "")
+                       paste0("dev: ", round(mod$frame$dev), "\n"), "")
     label <- paste0(label, label_dev)
   }
   sub("\\n+$", "", label)
