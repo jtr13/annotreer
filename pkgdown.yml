@@ -3,7 +3,7 @@ pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
   pruning: pruning.html
-last_built: 2025-11-11T20:26Z
+last_built: 2025-11-24T03:42Z
 urls:
   reference: https://jtr13.github.io/annotreer/reference
   article: https://jtr13.github.io/annotreer/articles
